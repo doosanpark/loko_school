@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.less';
 
 import {Divider, Menu, Button} from 'antd';
@@ -6,21 +6,25 @@ import 'antd/dist/antd.less';
 
 import {Link, BrowserRouter, Route} from 'react-router-dom'
 import Home from "./home/Home";
-import MainService from "./service/MainService";
+import Process from "./process/Process";
 import LogIn from "./login/LogIn";
-import SignIn from "./login/signin/SignIn";
+import SignUp from "./login/signup/SignUp";
 import Footer from "./footer/Footer";
 
 
 function App() {
 
-    const [current, setCurrent] = useState('mail');
+    const [current, setCurrent] = useState('home');
+
+   /* useEffect(console.log(match.params.id), []);*/
 
     function handleClick(e) {
         console.log('click ', e);
         setCurrent(e.key);
-
     };
+    useEffect(() => {
+        console.log("asd");
+    }, []);
 
     return (
         <div className="App">
@@ -30,7 +34,8 @@ function App() {
                     <div className={"App__Header_logo"}>
                         LOKO<br/>SCHOOL
                     </div>
-
+                    
+                    {/* localhost:3000/login 이런 식으로 바로 들어올 경우 표기가 안되는 문제가 있음 */}
                     <Menu
                         selectable={false}
                         onClick={handleClick}
@@ -87,9 +92,9 @@ function App() {
                 </div>
                 {/*<Divider style={{margin: '15px'}}/>*/}
 
-                <Route path={"/process"} component={MainService}/>
+                <Route path={"/process"} component={Process}/>
                 <Route path={"/login"} component={LogIn}/>
-                <Route path={"/signin"} component={SignIn}/>
+                <Route path={"/signup"} component={SignUp}/>
                 <Route exact path={"/"} component={Home}/>
 
             </BrowserRouter>

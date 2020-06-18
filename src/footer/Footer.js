@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './css/Footer.less'
 import {Divider} from "antd";
 

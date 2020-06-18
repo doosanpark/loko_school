@@ -10,6 +10,8 @@
     "antd": "4.3.3",
     "body-parser": "1.19.0",
     "cors": "2.8.5",
+    "country-list": "2.2.0",
+    "craco": "0.0.3",
     "craco-less": "1.17.0",
     "dateformat": "3.0.3",
     "express": "4.17.1",
@@ -24,7 +26,7 @@
   "scripts": {
     "start": "npm-run-all --parallel start:**",
     "start:client": "craco start",
-    "start:server": "node ./server/server.js",
+    "start:server": "nodemon ./server/server.js",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
@@ -43,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "axios": "0.19.2"
   }
 }

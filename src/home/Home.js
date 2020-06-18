@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './css/Home.less'
 
 import { Carousel } from 'antd';
 import 'antd/dist/antd.less';
-import mainImg from './img/main_whole.png';
 
 function Home() {
     return(

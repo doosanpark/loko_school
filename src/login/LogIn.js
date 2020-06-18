@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import './css/LogIn.less'
 import {Card, Carousel, Input, Form, Checkbox, Button, Divider} from "antd";
 import {Link} from "react-router-dom"
@@ -32,7 +32,6 @@ function LogIn() {
         <div className={"LogIn"}>
 
             <div className={"LogIn__Form"}>
-                <Card>
                     <Form
                         {...layout}
                         name="basic"
@@ -69,29 +68,27 @@ function LogIn() {
                             <Input.Password style={{width: "300px"}}/>
                         </Form.Item>
 
-                        <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+                        <Form.Item {...tailLayout} style={{}} name="remember" valuePropName="checked">
                             <Checkbox>Remember me</Checkbox>
+                            <Divider type={"vertical"}/>
+                            <Link to={"/findaccount"}>
+                                <Button type="link" >
+                                    Forgot Email or Password?
+                                </Button>
+                            </Link>
                         </Form.Item>
 
                         <Form.Item {...tailLayout}>
-                            <Button type="primary" htmlType="submit" style={{marginRight: "10px"}}>
-                                Submit
+                            <Button type="primary" htmlType="Log In" style={{marginRight: "10px"}}>
+                                Log In
                             </Button>
-                            <Link to={"/signin"}>
+                            <Link to={"/signup"}>
                                 <Button type="link" style={{marginLeft: "10px"}}>
-                                    Sign In
+                                    Sign Up
                                 </Button>
                             </Link>
                         </Form.Item>
                     </Form>
-                </Card>
-            </div>
-            <div className={"LogIn__Ad"}>
-                <Carousel autoplay>
-                    <div>
-                        <h3>1</h3>
-                    </div>
-                </Carousel>
             </div>
         </div>
     )
