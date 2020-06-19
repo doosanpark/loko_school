@@ -5,7 +5,8 @@ import {
     Checkbox,
     Button,
     Card,
-    Modal
+    Modal,
+    AutoComplete
 } from 'antd';
 import {Link} from "react-router-dom";
 import "./css/SignUp.less"
@@ -47,10 +48,43 @@ const tailFormItemLayout = {
 function SignUp(props) {
     const [form] = Form.useForm();
     const [countryList, setCountryList] = useState([]);
-    const [emailValidation, setEmailValidation]= useState(true);
+    const [emailValidation, setEmailValidation] = useState(true);
+    const [passLength, setPassLength] = useState(0);
+    const [options, setOptions] = useState([]);
+
+    const handleSearch = value => {
+
+        let list = []
+
+        countryList.map((map) => {
+
+            if(map.indexOf(value)!==-1){
+                list = list.concat(
+                    {value: map}
+                )
+
+            }
+        })
+
+        setOptions(
+            [
+                !list[0]? {} : list[0],
+                !list[1]? {} : list[1],
+                !list[2]? {} : list[2],
+                !list[3]? {} : list[3],
+                !list[4]? {} : list[4],
+            ]
+        );
+    };
+
+
+    const onSelect = value => {
+        console.log("onSelect", value);
+    };
+
 
     const onFinish = values => {
-        axios.put('http://localhost:3001/create', {
+        axios.put('http://192.168.100.25:3001/create', {
             /*body: JSON.stringify(props)*/
             email: values.email,
             pass: values.password,
@@ -60,10 +94,9 @@ function SignUp(props) {
             agreement: values.agreement
 
         }).then(response => {
-            var msg = response.data;
-            if (msg === "Input Succeed") {
-                console.log("res success", msg);
 
+            var msg = response.data;
+            if (msg === "Succeed") {
                 Modal.success({
                         content: 'Congratulations! Account has been created!',
                         onOk: () => {
@@ -71,14 +104,12 @@ function SignUp(props) {
                         }
                     }
                 );
-            } else{
-                /*console.log("res failed", msg.code);*/
+            } else {
                 Modal.error({
                     content: 'Account has been failed to create.',
                 });
             }
         }).catch((error) => {
-            /*console.log("res err", error);*/
             Modal.error({
                 content: 'Account has been failed to create.',
             });
@@ -86,25 +117,22 @@ function SignUp(props) {
     };
 
     const getCountries = () => {
-        axios.get('http://localhost:3001/get_countries')
+        axios.get('http://192.168.100.25:3001/get_countries')
             .then(function (response) {
                 setCountryList(response.data);
-                console.log("country", response.data);
             }).catch(function (error) {
-            console.log("getPost error", error);
         });
     }
 
     useEffect(getCountries, []);
 
     function handleBlur(e) {
-        /*console.log("value", e.target.value);*/
         var email = e.target.value
-        axios.post('http://localhost:3001/check_email', {
+        axios.post('http://192.168.100.25:3001/check_email', {
             email
         })
             .then(function (response) {
-                if(response.data==="success"){
+                if (response.data === "enrolled") {
                     setEmailValidation(false);
 
                     form.setFields([
@@ -122,7 +150,6 @@ function SignUp(props) {
         });
 
     }
-
     return (
         <div className={"SignUp"}>
             <Card style={{width: '600px', textAlign: "left"}}>
@@ -149,21 +176,19 @@ function SignUp(props) {
                             },
                             ({getFieldValue}) => ({
                                 validator(rule, value) {
-                                    console.log("value", value);
-                                    console.log("emailValidation", emailValidation);
-
-                                    if (value && emailValidation) {    //입력된 값이 있을 때
-                                        if(emailValidation) //이메일이 이미 등록된 상태일 때(emailValidation이 false 일 때)
+                                    if (value) {    //입력된 값이 있을 때
+                                        if (emailValidation) {//이메일이 이미 등록된 상태일 때(emailValidation이 false 일 때)
                                             return Promise.resolve();
+                                        }
+                                        return Promise.reject('Email already has bean enrolled!');
                                     }
-                                    setEmailValidation(true);
+                                    return Promise.resolve();
 
-                                    return Promise.reject('Email already has bean enrolled!');
                                 },
                             }),
                         ]}
                     >
-                        <Input onBlur={(e) => handleBlur(e)}/>
+                        <Input onBlur={(e) => handleBlur(e)} onClick={() => setEmailValidation(true)}/>
                     </Form.Item>
 
                     <Form.Item
@@ -178,14 +203,15 @@ function SignUp(props) {
                                 validator(rule, value) {
                                     //value.length 사용 시 뭐 validator 어쩌구 저쩌구
 
-                                    if (value.length > 0) {
+                                    if (value) {
                                         var pattern1 = /[0-9]/;  // 숫자
                                         var pattern2 = /[a-z]/;
                                         var pattern3 = /[A-Z]/;
                                         var pattern4 = /[~!@#$%^&*()_+|<>?:{}]/;  // 특수문자
-                                        if (value.length < 8) {
-                                            return Promise.reject('Password have to longer than 8 characters!');
-                                        } else if (pattern1.test(value) === false) {
+                                        if(passLength<8){
+                                            return Promise.reject('The password should longer than 8 characters!');
+                                        }
+                                        else if (pattern1.test(value) === false) {
                                             return Promise.reject('The passwords should include a number!');
                                         } else if (pattern2.test(value) === false) {
                                             return Promise.reject('The passwords should include a lowercase!');
@@ -196,12 +222,17 @@ function SignUp(props) {
                                         }
                                     }
                                     return Promise.resolve();
+
                                 }
                             })
                         ]}
                         hasFeedback
                     >
-                        <Input.Password/>
+                        <Input.Password onChange={
+                            (e) => {
+                                setPassLength(e.target.value.length);
+                            }}
+                        />
                     </Form.Item>
 
                     <Form.Item
@@ -238,7 +269,11 @@ function SignUp(props) {
                         ]}
                     >
                         {/*<Input onChange={searchCountry}/>*/}
-                        <Input/>
+                        <AutoComplete
+                            options={options}
+                            onSelect={onSelect}
+                            onSearch={handleSearch}
+                        />
 
                     </Form.Item>
 

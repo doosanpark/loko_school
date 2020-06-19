@@ -1,7 +1,8 @@
 import React from 'react'
 import './css/LogIn.less'
-import {Card, Carousel, Input, Form, Checkbox, Button, Divider} from "antd";
+import {Card, Carousel, Input, Form, Checkbox, Button, Divider, Modal} from "antd";
 import {Link} from "react-router-dom"
+import axios from "axios";
 
 const layout = {
     labelCol: {
@@ -18,15 +19,31 @@ const tailLayout = {
     },
 };
 
-function LogIn() {
+function LogIn(props) {
 
     const onFinish = values => {
-        console.log('Success:', values);
+        axios.post('http://localhost:3001/check_login', {
+            /*body: JSON.stringify(props)*/
+            email: values.email,
+            pass: values.password
+        }).then(response => {
+
+            var msg = response.data;
+            if (msg === "success") {
+                props.history.push("/");
+            } else {
+                Modal.error({
+                    content: 'Account has been failed to create.',
+                });
+            }
+
+        }).catch((error) => {
+            Modal.error({
+                content: 'Log in has been failed.',
+            });
+        });
     };
 
-    const onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
-    };
 
     return (
         <div className={"LogIn"}>
@@ -39,20 +56,19 @@ function LogIn() {
                             remember: true,
                         }}
                         onFinish={onFinish}
-                        onFinishFailed={onFinishFailed}
-                        style={{marginTop: '24px'}}
+                        style={{marginTop: '24px', width: 600}}
                     >
                         <Form.Item
-                            label="Username"
-                            name="username"
+                            label="E-mail"
+                            name="email"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please input your username!',
+                                    message: 'Please input your email!',
                                 },
                             ]}
                         >
-                            <Input style={{width: "300px"}}/>
+                            <Input style={{width: "350px"}}/>
                         </Form.Item>
 
                         <Form.Item
@@ -65,7 +81,7 @@ function LogIn() {
                                 },
                             ]}
                         >
-                            <Input.Password style={{width: "300px"}}/>
+                            <Input.Password style={{width: "350px"}}/>
                         </Form.Item>
 
                         <Form.Item {...tailLayout} style={{}} name="remember" valuePropName="checked">
@@ -73,7 +89,7 @@ function LogIn() {
                             <Divider type={"vertical"}/>
                             <Link to={"/findaccount"}>
                                 <Button type="link" >
-                                    Forgot Email or Password?
+                                    Forgot E-mail or Password?
                                 </Button>
                             </Link>
                         </Form.Item>
