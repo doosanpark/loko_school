@@ -9,7 +9,7 @@ import {
     AutoComplete
 } from 'antd';
 import {Link} from "react-router-dom";
-import "./css/SignUp.less"
+import "../../css/SignUp.less"
 import axios from 'axios';
 
 const {success} = Modal;
@@ -84,7 +84,7 @@ function SignUp(props) {
 
 
     const onFinish = values => {
-        axios.put('http://192.168.100.25:3001/create', {
+        axios.put('http://localhost:3001/account/create', {
             /*body: JSON.stringify(props)*/
             email: values.email,
             pass: values.password,
@@ -94,7 +94,7 @@ function SignUp(props) {
             agreement: values.agreement
 
         }).then(response => {
-
+            console.log("res", response);
             var msg = response.data;
             if (msg === "Succeed") {
                 Modal.success({
@@ -117,7 +117,7 @@ function SignUp(props) {
     };
 
     const getCountries = () => {
-        axios.get('http://192.168.100.25:3001/get_countries')
+        axios.get('http://localhost:3001/account/get_countries')
             .then(function (response) {
                 setCountryList(response.data);
             }).catch(function (error) {
@@ -128,7 +128,7 @@ function SignUp(props) {
 
     function handleBlur(e) {
         var email = e.target.value
-        axios.post('http://192.168.100.25:3001/check_email', {
+        axios.post('http://localhost3001/account/check_email', {
             email
         })
             .then(function (response) {

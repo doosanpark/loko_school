@@ -1,8 +1,13 @@
 import React from 'react'
-import './css/LogIn.less'
+import '../../css/LogIn.less'
 import {Card, Carousel, Input, Form, Checkbox, Button, Divider, Modal} from "antd";
 import {Link} from "react-router-dom"
 import axios from "axios";
+
+import {connect} from 'react-redux';
+import {loginRequest} from "../../redux/actions/authentication";
+
+import PropTypes from 'prop-types';
 
 const layout = {
     labelCol: {
@@ -22,12 +27,11 @@ const tailLayout = {
 function LogIn(props) {
 
     const onFinish = values => {
-        axios.post('http://localhost:3001/check_login', {
+        axios.post('http://localhost:3001/account/login', {
             /*body: JSON.stringify(props)*/
             email: values.email,
             pass: values.password
         }).then(response => {
-
             var msg = response.data;
             if (msg === "success") {
                 props.history.push("/");
@@ -110,4 +114,18 @@ function LogIn(props) {
     )
 }
 
-export default LogIn;
+const mapStateToProps = (state) => {
+    return {
+        status: state.authentication.login.status
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loginRequest: (id, pw) => {
+            return dispatch(loginRequest(id, pw));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

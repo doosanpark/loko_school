@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import yuri from './img/yuri.png';
-import teacher from './img/teacher.png';
-import couple from './img/couple.png';
+import yuri from '../../css/img/yuri.png';
+import teacher from '../../css/img/teacher.png';
+import couple from '../../css/img/couple.png';
 
-import './css/Process.less'
+import '../../css/Process.less'
 import 'antd/dist/antd.less';
 import {Card, Carousel} from 'antd';
 

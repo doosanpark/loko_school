@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/Footer.less'
+import '../../css/Footer.less'
 import {Divider} from "antd";
 
 function Footer() {

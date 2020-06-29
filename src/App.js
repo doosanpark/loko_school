@@ -4,18 +4,26 @@ import './App.less';
 import {Divider, Menu, Button} from 'antd';
 import 'antd/dist/antd.less';
 
-import {Link, BrowserRouter, Route} from 'react-router-dom'
-import Home from "./home/Home";
-import Process from "./process/Process";
-import LogIn from "./login/LogIn";
-import SignUp from "./login/signup/SignUp";
-import Footer from "./footer/Footer";
-import MyClass from "./myclass/MyClass";
+import {
+    BrowserRouter,
+    Link,
+    Route
+} from "react-router-dom";
+
+import {connect} from 'react-redux';
+
+import Home from "./components/home/Home";
+import Process from "./components/process/Process";
+import LogIn from "./components/account/LogIn";
+import SignUp from "./components/account/SignUp";
+import Footer from "./components/footer/Footer";
+import MyClass from "./components/myclass/MyClass";
+import Counter from "./components/Counter";
 
 
-function App() {
+function App(props) {
 
-    const [current, setCurrent] = useState('home');
+    const [current, setCurrent] = useState();
 
     /* useEffect(console.log(match.params.id), []);*/
 
@@ -25,16 +33,18 @@ function App() {
     };
     useEffect(() => {
         /*console.log("asd");*/
+        /*console.log("location", location.pathname);*/
     }, []);
 
     return (
         <div className="App">
             <BrowserRouter>
                 <div className={"App__Header"}>
-
-                    <div className={"App__Header_logo"}>
-                        LOKO<br/>SCHOOL
-                    </div>
+                    <Link to={"/"}>
+                        <div className={"App__Header_logo"} onClick={()=>{setCurrent("home")}}>
+                            LOKO<br/>SCHOOL
+                        </div>
+                    </Link>
                     <div style={{width: '100%', textAlign: 'right'}}>
 
                         <div style={{marginRight: 30}}>
@@ -113,6 +123,12 @@ function App() {
             <Footer/>
         </div>
     );
+}
+
+const mapStateToProps = (state) => {
+    return{
+
+    }
 }
 
 export default App;

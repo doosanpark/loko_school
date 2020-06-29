@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/Home.less'
+import '../../css/Home.less'
 
 import { Carousel } from 'antd';
 import 'antd/dist/antd.less';
