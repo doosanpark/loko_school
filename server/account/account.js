@@ -9,7 +9,7 @@ var dateFormat = require('dateformat');
 var time = dateFormat(new Date(), "yyyy-mm-dd");
 const countryList = require('country-list');
 
-
+// 회원 계정 생성/등록
 router.put('/create', function (req, res) {
 
     var email = req.body.email;
@@ -32,17 +32,7 @@ router.put('/create', function (req, res) {
     })
 })
 
-router.get('/list', function (req, res) {
-    connection.query('SELECT * FROM members', function (err, rows, field) {
-        if (!err) {
-            /*console.log("rows", rows);*/
-            res.send(rows);
-        } else {
-            console.log('Error while performing Query.', err);
-        }
-    });
-})
-
+//이메일 등록 여부 검사
 router.post('/check_email', function (req, res) {
     /*console.log("req", req.body.email);*/
     connection.query('select EXISTS (SELECT * FROM members WHERE email = ?) as success',
@@ -60,23 +50,14 @@ router.post('/check_email', function (req, res) {
         });
 })
 
+//나라 목록 반환
 router.get('/get_countries', function (req, res) {
     /*console.log("countryList", countryList.getNames());*/
     res.send(countryList.getNames());
 
 })
 
-router.post('/get', function (req, res) {
-    var id = req.body.id;
-    connection.query('SELECT * FROM members WHERE ID = ?', [id], function (err, rows, field) {
-        if (!err) {
-            res.send(rows);
-        } else {
-            console.log('Error while performing Query.', err);
-        }
-    });
-})
-
+// 해당 회원 정보 삭제
 router.delete('/delete', function (req, res) {
     var id = req.body.id;
     /*console.log("데이터", id);*/
@@ -89,16 +70,13 @@ router.delete('/delete', function (req, res) {
     })
 });
 
+//로그인 시 id, password 체크
 router.post('/login', (req, res) => {
     /*console.log("req", req.body.email);*/
-    connection.query('select EXISTS (SELECT * FROM members WHERE email = ? and password = ?) as success',
+    connection.query('SELECT first_name FROM members WHERE email = ? and password = ?',
         [req.body.email, req.body.pass], function (err, rows, field) {
             if (!err) {
-                if(rows[0].success===0){
-                    res.send('failed');
-                } else if(rows[0].success===1){
-                    res.send('successed');
-                }
+                res.send(rows);
             } else {
                 console.log('Error while performing Query.', err);
             }

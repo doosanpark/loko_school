@@ -5,7 +5,6 @@ var dbconfig = require('./database.js');
 var account = require('./account/account');
 
 const cors = require('cors');
-const countryList = require('country-list');
 
 
 var app = express();

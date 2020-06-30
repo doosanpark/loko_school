@@ -9,14 +9,18 @@ import {SignUp, LogIn} from './components/account'
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from "redux";
 import reducer from "./redux/reducers/reducer";
+import {BrowserRouter as Router} from "react-router-dom";
+import { createMemoryHistory } from 'history';
 
 const store = createStore(reducer);
-
+const history = createMemoryHistory()
 ReactDOM.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <App/>
-        </Provider>
+        <Router history={history}>
+            <Provider store={store}>
+                <App/>
+            </Provider>
+        </Router>
     </React.StrictMode>
     ,
     document.getElementById('root')

@@ -5,9 +5,9 @@ import {Divider, Menu, Button} from 'antd';
 import 'antd/dist/antd.less';
 
 import {
-    BrowserRouter,
     Link,
-    Route
+    Route,
+    useLocation
 } from "react-router-dom";
 
 import {connect} from 'react-redux';
@@ -19,29 +19,34 @@ import SignUp from "./components/account/SignUp";
 import Footer from "./components/footer/Footer";
 import MyClass from "./components/myclass/MyClass";
 import Counter from "./components/Counter";
+import HomeButton from "./components/HomeButton";
+
 
 
 function App(props) {
 
-    const [current, setCurrent] = useState();
+    const [current, setCurrent] = useState("/home");
 
     /* useEffect(console.log(match.params.id), []);*/
 
+    function usePageViews() {
+        let {location} = useLocation();
+        React.useEffect(() => {
+            console.log("location", location);
+        }, [location]);
+    }
     function handleClick(e) {
         /*console.log('click ', e);*/
         setCurrent(e.key);
     };
-    useEffect(() => {
-        /*console.log("asd");*/
-        /*console.log("location", location.pathname);*/
-    }, []);
-
+    usePageViews();
     return (
         <div className="App">
-            <BrowserRouter>
+
                 <div className={"App__Header"}>
+                    {/* 홈페이지 상단 로고 구현. 클리 시 home으로 이동. */}
                     <Link to={"/"}>
-                        <div className={"App__Header_logo"} onClick={()=>{setCurrent("home")}}>
+                        <div className={"App__Header_logo"} onClick={()=>{setCurrent("/home")}}>
                             LOKO<br/>SCHOOL
                         </div>
                     </Link>
@@ -51,7 +56,7 @@ function App(props) {
                             <Link to={"/login"}>
                                 <Button style={{fontSize: 15, color: "primary"}} type={"link"} onClick={() => {
                                     setCurrent("");
-                                }}>Log In</Button>
+                                }}>{props.status==="SUCCESS"? "Log Out": "Log In"}</Button>
                             </Link>
                             <Divider style={{height: 20}} type={"vertical"}/>
                             <Link to={"/myclass"}>
@@ -59,11 +64,12 @@ function App(props) {
                             </Link>
                         </div>
 
-                        {/* localhost:3000/login 이런 식으로 바로 들어올 경우 표기가 안되는 문제가 있음 */}
+                        {/* localhost:3000/login 이런 식으로 url을 입력하여 페이지를 렌더링할 경우 메뉴 탭이 반영 안되는 문제가 있음 */}
+                        {/* Header의 Menu 탭 구현 */}
                         <Menu
                             selectable={false}
                             onClick={handleClick}
-                            selectedKeys={[current]}
+                            selectedKeys={current}
                             className={"App__Menu"}
                             style={{
                                 width: '100%',
@@ -118,17 +124,16 @@ function App(props) {
                 <Route path={"/login"} component={LogIn}/>
                 <Route path={"/signup"} component={SignUp}/>
                 <Route exact path={"/"} component={Home}/>
-
-            </BrowserRouter>
             <Footer/>
+
         </div>
     );
 }
 
 const mapStateToProps = (state) => {
     return{
-
+        status: state.authentication.login.status
     }
 }
 
-export default App;
+export default connect(mapStateToProps)(App);

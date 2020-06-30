@@ -52,28 +52,21 @@ function SignUp(props) {
     const [passLength, setPassLength] = useState(0);
     const [options, setOptions] = useState([]);
 
-    const handleSearch = value => {
-
+    const handleSearch = value => { //국가 리스트를 가져오는 함수
+        
         let list = []
 
         countryList.map((map) => {
 
-            if(map.indexOf(value)!==-1){
+            if(map.toLowerCase().indexOf(value)!==-1){
                 list = list.concat(
                     {value: map}
                 )
-
             }
         })
 
         setOptions(
-            [
-                !list[0]? {} : list[0],
-                !list[1]? {} : list[1],
-                !list[2]? {} : list[2],
-                !list[3]? {} : list[3],
-                !list[4]? {} : list[4],
-            ]
+            list
         );
     };
 
@@ -83,6 +76,7 @@ function SignUp(props) {
     };
 
 
+    //Register 버튼을 눌렀을 회원 정보 등록
     const onFinish = values => {
         axios.put('http://localhost:3001/account/create', {
             /*body: JSON.stringify(props)*/
@@ -96,10 +90,13 @@ function SignUp(props) {
         }).then(response => {
             console.log("res", response);
             var msg = response.data;
+
+            //회원 등록 성공 시
             if (msg === "Succeed") {
                 Modal.success({
                         content: 'Congratulations! Account has been created!',
                         onOk: () => {
+                            //OK 버튼을 누르면 login 화면으로 이동
                             props.history.push("/login");
                         }
                     }
@@ -116,6 +113,7 @@ function SignUp(props) {
         });
     };
 
+    //페이지 렌더링 시에 나라 목록 가져옴
     const getCountries = () => {
         axios.get('http://localhost:3001/account/get_countries')
             .then(function (response) {
@@ -126,6 +124,7 @@ function SignUp(props) {
 
     useEffect(getCountries, []);
 
+    // E-mail이 현재 등록된 상태인지 확인
     function handleBlur(e) {
         var email = e.target.value
         axios.post('http://localhost3001/account/check_email', {
@@ -141,9 +140,6 @@ function SignUp(props) {
                             errors: ['Email already has bean enrolled!'],
                         },
                     ]);
-
-                } else {
-                    /*setEmailValidation(true);*/
                 }
             }).catch(function (error) {
             console.log("getPost error", error);
@@ -162,6 +158,7 @@ function SignUp(props) {
                     onFinish={onFinish}
                     scrollToFirstError
                 >
+                    {/* 이메일 입력 폼 */}
                     <Form.Item
                         name="email"
                         label="E-mail"
@@ -176,18 +173,18 @@ function SignUp(props) {
                             },
                             ({getFieldValue}) => ({
                                 validator(rule, value) {
-                                    if (value) {    //입력된 값이 있을 때
-                                        if (emailValidation) {//이메일이 이미 등록된 상태일 때(emailValidation이 false 일 때)
+                                    if (value) {    // Input 태그에 입력된 값이 있을 때
+                                        if (emailValidation) {//이메일이 등록 안된 상태일 때
                                             return Promise.resolve();
                                         }
                                         return Promise.reject('Email already has bean enrolled!');
                                     }
                                     return Promise.resolve();
-
                                 },
                             }),
                         ]}
                     >
+                        {/* onBlur 시 입력한 이메일이 이미 DB에 등록되어 있는지 확인 */}
                         <Input onBlur={(e) => handleBlur(e)} onClick={() => setEmailValidation(true)}/>
                     </Form.Item>
 
@@ -201,23 +198,27 @@ function SignUp(props) {
                             },
                             ({getFieldValue}) => ({
                                 validator(rule, value) {
-                                    //value.length 사용 시 뭐 validator 어쩌구 저쩌구
 
+                                    /*
+                                    * 비밀번호 판별 규칙
+                                    * 1. 최소 8글자여야 함.
+                                    * 2. 숫자, 대소문자 및 특수문자가 모두 포함되어 있어야 함
+                                    * */
                                     if (value) {
                                         var pattern1 = /[0-9]/;  // 숫자
-                                        var pattern2 = /[a-z]/;
-                                        var pattern3 = /[A-Z]/;
+                                        var pattern2 = /[a-z]/;  // 소문자
+                                        var pattern3 = /[A-Z]/;  // 대문자
                                         var pattern4 = /[~!@#$%^&*()_+|<>?:{}]/;  // 특수문자
-                                        if(passLength<8){
+                                        if(passLength<8){   //8글자인지 검사
                                             return Promise.reject('The password should longer than 8 characters!');
                                         }
-                                        else if (pattern1.test(value) === false) {
+                                        else if (pattern1.test(value) === false) {  // 숫자 포함되어 있는지 검사
                                             return Promise.reject('The passwords should include a number!');
-                                        } else if (pattern2.test(value) === false) {
+                                        } else if (pattern2.test(value) === false) {  // 소문자가 포함되어 있는지 검사
                                             return Promise.reject('The passwords should include a lowercase!');
-                                        } else if (pattern3.test(value) === false) {
+                                        } else if (pattern3.test(value) === false) {  // 대문자가 포함되어 있는지 검사
                                             return Promise.reject('The passwords should include a uppercase!');
-                                        } else if (pattern4.test(value) === false) {
+                                        } else if (pattern4.test(value) === false) {  // 특수문자가 포함되어 있는지 검사
                                             return Promise.reject('The passwords should include a special case!');
                                         }
                                     }
@@ -247,6 +248,8 @@ function SignUp(props) {
                             },
                             ({getFieldValue}) => ({
                                 validator(rule, value) {
+
+                                    // 위 password에서 입력했던 내용과 일치 여부 검사
                                     if (!value || getFieldValue('password') === value) {
                                         return Promise.resolve();
                                     }
@@ -277,7 +280,6 @@ function SignUp(props) {
 
                     </Form.Item>
 
-
                     <Form.Item
                         name="first_name"
                         label="First name"
@@ -290,24 +292,6 @@ function SignUp(props) {
                     >
                         <Input/>
                     </Form.Item>
-
-                    {/*
-                    <Form.Item
-                        name="phone"
-                        label="Phone Number"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your phone number!',
-                            },
-                        ]}
-                    >
-                        <Input
-                            style={{
-                                width: '100%',
-                            }}
-                        />
-                    </Form.Item>*/}
 
                     <Form.Item
                         name="agreement"
@@ -331,7 +315,6 @@ function SignUp(props) {
                     </Form.Item>
                 </Form>
             </Card>
-
         </div>
     )
 }

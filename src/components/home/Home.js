@@ -8,16 +8,19 @@ function Home() {
     return(
         <div className={"Home"}>
             <div className={"Home__img"}>
-                <div style={{width: 800, fontWeight: 'bold', textAlign: "left", fontSize: '50px', marginTop: 130}}>
-                    2020. March.<br/>
-                    "Why that lyrics made you cry?"
+                <div style={{width: 800, textAlign: "left", fontSize: '30px', marginTop: 130, marginLeft: 100, lineHeight: '40px'}}>
+                    1:1 Online Tutor
                 </div>
-                <div style={{width: 650, textAlign: "left", fontSize: '15px', marginTop: 80}}>
-                    Learning only what others forced you to do never stay in you long . <br/>
-                    Study Korean words & expressions that you look up for. Answer to your Journal question and get a language
-                    feedback from your Private Local Korean study mate who have a similar interest with you, who genuinely understand you.<br/>
-                    Our study mates are young, warm, wise, and love K-culture.<br/>
-                    <button id={"Home__detail"} >More Details</button>
+                <div style={{width: 800, fontWeight: 'bold', textAlign: "left", fontSize: '45px', marginTop: 15, marginLeft: 100, lineHeight: '55px'}}>
+                    The intersection of <br/>
+                    Korean Culture and Language
+                </div>
+                <div style={{width: 700, textAlign: "left", fontSize: '25px', marginTop: 50, marginLeft: 100}}>
+
+                    Meet <span style={{fontWeight: 'bold'}}>1:1 Live Online Tutoring Service</span> with <br/>College Students majoring in Korean, Loko School.<br/>
+
+
+                    <button id={"Home__detail"} >Book Now!</button>
                 </div>
             </div>
 
