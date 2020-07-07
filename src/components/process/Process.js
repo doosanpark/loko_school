@@ -14,10 +14,12 @@ function Process() {
             <Card className={"Process__Info"}>
                 dd
             </Card>
+
+
+            {/*
             <Carousel
                 className={"Process__Carousel"}
                 dotPosition={"top"}
-                /*effect={"fade"}*/
                 autoplay
             >
                 <div className={"Process__Carousel-div"}>
@@ -29,7 +31,7 @@ function Process() {
                 <div className={"Process__Carousel-div"}>
                     <img style={{margin: 0, width: "100%"}} src={teacher}/>
                 </div>
-            </Carousel>
+            </Carousel>*/}
         </div>
     )
 }

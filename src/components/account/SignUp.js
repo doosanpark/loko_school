@@ -53,7 +53,7 @@ function SignUp(props) {
     const [options, setOptions] = useState([]);
 
     const handleSearch = value => { //국가 리스트를 가져오는 함수
-        
+
         let list = []
 
         countryList.map((map) => {
@@ -70,10 +70,6 @@ function SignUp(props) {
         );
     };
 
-
-    const onSelect = value => {
-        console.log("onSelect", value);
-    };
 
 
     //Register 버튼을 눌렀을 회원 정보 등록
@@ -274,7 +270,6 @@ function SignUp(props) {
                         {/*<Input onChange={searchCountry}/>*/}
                         <AutoComplete
                             options={options}
-                            onSelect={onSelect}
                             onSearch={handleSearch}
                         />
 

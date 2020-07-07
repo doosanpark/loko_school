@@ -4,9 +4,7 @@ import {
     AUTH_LOGIN,
     AUTH_LOGIN_FAILURE,
     AUTH_LOGIN_SUCCESS,
-    AUTH_REGISTER,
-    AUTH_REGISTER_FAILURE,
-    AUTH_REGISTER_SUCCESS
+    AUTH_LOGOUT
 } from "./ActionTypes";
 
 export function loginRequest(username, password) {
@@ -14,7 +12,7 @@ export function loginRequest(username, password) {
         // Inform Login API is starting
         dispatch(login());
 
-        return axios.post('/account//login', {username, password})
+        return axios.post('/account/login', {username, password})
             .then((response) => {
                 dispatch(loginSuccess(username));
             }).catch((error) => {
@@ -29,15 +27,26 @@ export function login() {
     }
 }
 
-export function loginSuccess(username) {
+export function loginSuccess(userName, email, auth) {
+
+
     return {
         type: AUTH_LOGIN_SUCCESS,
-        username
+        userName,
+        email,
+        auth
     }
 }
 
 export function loginFailure() {
     return {
         type: AUTH_LOGIN_FAILURE
+    };
+}
+
+
+export function logOut() {
+    return {
+        type: AUTH_LOGOUT
     };
 }

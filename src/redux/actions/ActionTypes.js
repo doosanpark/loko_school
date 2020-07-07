@@ -5,6 +5,7 @@ export const AUTH_REGISTER_FAILURE = "AUTH_REGISTER_FAILURE";
 
 // 로그인 관련 타입
 export const AUTH_LOGIN = "AUTH_LOGIN";
+export const AUTH_LOGOUT = "AUTH_LOGOUT";
 export const AUTH_LOGIN_SUCCESS = "AUTH_LOGIN_SUCCESS";
 export const AUTH_LOGIN_FAILURE = "AUTH_LOGIN_FAILURE";
 

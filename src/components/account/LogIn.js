@@ -12,7 +12,7 @@ import {AUTH_LOGIN_FAILURE} from "../../redux/actions/ActionTypes";
 
 const layout = {
     labelCol: {
-        span: 7,
+        span: 9,
     },
     wrapperCol: {
         span: 194,
@@ -20,10 +20,18 @@ const layout = {
 };
 const tailLayout = {
     wrapperCol: {
-        offset: 7,
+        offset: 9,
         span: 14,
     },
 };
+
+const dividerLayout={
+    wrapperCol: {
+        offset: 4,
+        span: 14,
+    },
+}
+
 
 function LogIn(props) {
 
@@ -41,7 +49,17 @@ function LogIn(props) {
             //입력한 id와 비밀번호가 있을 경우, redux에 로그인 정보 저장.
             if (msg !== []) {
                 setUserName(msg[0].first_name);
-                props.loginSucceed(msg[0].first_name)
+                props.loginSucceed(msg[0].first_name);
+                console.log("리멤버", values);
+                if (values.remember) {
+                    localStorage.setItem("id", values.email);
+                    localStorage.setItem("pass", values.password);
+                    localStorage.setItem("login_status", true);
+                } else {
+                    sessionStorage.setItem("id", values.email);
+                    sessionStorage.setItem("pass", values.password);
+                    sessionStorage.setItem("login_status", true);
+                }
 
                 //로그인 성공 시 Modal(성공) 출력
                 Modal.success({
@@ -77,7 +95,7 @@ function LogIn(props) {
                         remember: true,
                     }}
                     onFinish={onFinish}
-                    style={{marginTop: '24px', width: 600}}
+                    style={{marginTop: '24px', width: 800}}
                 >
                     <Form.Item
                         label="E-mail"
@@ -105,27 +123,32 @@ function LogIn(props) {
                         <Input.Password style={{width: "350px"}}/>
                     </Form.Item>
 
-                    <Form.Item {...tailLayout} style={{}} name="remember" valuePropName="checked">
+                    <Form.Item {...tailLayout} name="remember" valuePropName="checked">
                         <Checkbox>Remember me</Checkbox>
-                        <Divider type={"vertical"}/>
+                    </Form.Item>
+
+                    <Form.Item {...tailLayout}>
+                        <Button type="primary" htmlType="Log In" style={{width: "350px", marginRight: "10px"}}>
+                            Log In
+                        </Button>
+                    </Form.Item>
+                    
+                    <Form.Item {...tailLayout}>
+                        <Link to={"/signup"}>
+                            <Button type="link" style={{padding: 0, color: '#cccccc'}}>
+                                Sign Up
+                            </Button>
+                        </Link>
+                        <Divider type={"vertical"} style={{margin: '0px 20px'}}/>
                         <Link to={"/find_account"}>
-                            <Button type="link">
+                            <Button type="link" style={{padding: 0, color: '#cccccc'}}>
                                 Forgot E-mail or Password?
                             </Button>
                         </Link>
                     </Form.Item>
-
-                    <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="Log In" style={{marginRight: "10px"}}>
-                            Log In
-                        </Button>
-                        <Link to={"/signup"}>
-                            <Button type="link" style={{marginLeft: "10px"}}>
-                                Sign Up
-                            </Button>
-                        </Link>
-                    </Form.Item>
                 </Form>
+
+
             </div>
         </div>
     )
@@ -140,7 +163,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loginSucceed: (userName) => {
-            return dispatch(loginSuccess(userName));
+            return dispatch(loginSuccess(userName, "admin"));
         }
     }
 }

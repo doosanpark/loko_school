@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../../css/Home.less'
 
 import { Carousel } from 'antd';
 import 'antd/dist/antd.less';
+import {connect} from "react-redux";
 
 function Home() {
+
     return(
         <div className={"Home"}>
             <div className={"Home__img"}>
@@ -41,6 +43,5 @@ function Home() {
         </div>
     )
 }
-
 
 export default Home;
