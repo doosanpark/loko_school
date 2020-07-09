@@ -15,15 +15,16 @@ import {connect} from 'react-redux';
 import Home from "./components/home/Home";
 import Process from "./components/process/Process";
 import LogIn from "./components/account/LogIn";
-import SignUp from "./components/account/SignUp";
+import StudentSignUp from "./components/account/student/StudentSignUp";
 import Footer from "./components/footer/Footer";
 import MyClass from "./components/myclass/MyClass";
 import {logOut} from "./redux/actions/authentication";
+import Reservation from "./components/reservation/Reservation";
+import TutorSignUp from "./components/account/tutor/TutorSignUp";
 
 
 function usePageViews() {
     let location = useLocation();
-    console.log("location", location.pathname);
     return (location.pathname)
 }
 
@@ -59,8 +60,6 @@ function App(props) {
             cancelText: '취소',
         })
     }
-
-
 
     return (
         <div className="App">
@@ -113,9 +112,9 @@ function App(props) {
                         style={{
                             width: '100%',
                             textAlign: "right",
-                            fontSize: '20px',
+                            fontSize: '2rem',
                             fontWeight: "bold",
-                            paddingRight: "24px"
+                            paddingRight: "2.4rem"
                         }}
                         mode="horizontal">
 
@@ -161,7 +160,9 @@ function App(props) {
             <Route path={"/process"} component={Process}/>
             <Route path={"/myclass"} component={MyClass}/>
             <Route path={"/login"} component={LogIn}/>
-            <Route path={"/signup"} component={SignUp}/>
+            <Route path={"/tutor/signup"} component={TutorSignUp}/>
+            <Route path={"/signup"} component={StudentSignUp}/>
+            <Route path={"/reservation"} component={Reservation}/>
             <Route path={"/home"} component={Home}/>
             <Route exact path={"/"} component={Home}/>
             <Footer/>

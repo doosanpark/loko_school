@@ -8,8 +8,7 @@ import {
     Modal,
     AutoComplete
 } from 'antd';
-import {Link} from "react-router-dom";
-import "../../css/SignUp.less"
+import "../../../css/StudentSignUp.less"
 import axios from 'axios';
 
 const {success} = Modal;
@@ -45,7 +44,7 @@ const tailFormItemLayout = {
     },
 };
 
-function SignUp(props) {
+function StudentSignUp(props) {
     const [form] = Form.useForm();
     const [countryList, setCountryList] = useState([]);
     const [emailValidation, setEmailValidation] = useState(true);
@@ -58,7 +57,7 @@ function SignUp(props) {
 
         countryList.map((map) => {
 
-            if(map.toLowerCase().indexOf(value)!==-1){
+            if(map.toLowerCase().indexOf(value.toLowerCase())!==-1){
                 list = list.concat(
                     {value: map}
                 )
@@ -74,7 +73,7 @@ function SignUp(props) {
 
     //Register 버튼을 눌렀을 회원 정보 등록
     const onFinish = values => {
-        axios.put('http://localhost:3001/account/create', {
+        axios.put('http://localhost:3001/student/create', {
             /*body: JSON.stringify(props)*/
             email: values.email,
             pass: values.password,
@@ -82,7 +81,6 @@ function SignUp(props) {
             fname: values.first_name,
             lname: values.last_name,
             agreement: values.agreement
-
         }).then(response => {
             console.log("res", response);
             var msg = response.data;
@@ -111,7 +109,7 @@ function SignUp(props) {
 
     //페이지 렌더링 시에 나라 목록 가져옴
     const getCountries = () => {
-        axios.get('http://localhost:3001/account/get_countries')
+        axios.get('http://localhost:3001/student/get_countries')
             .then(function (response) {
                 setCountryList(response.data);
             }).catch(function (error) {
@@ -123,7 +121,7 @@ function SignUp(props) {
     // E-mail이 현재 등록된 상태인지 확인
     function handleBlur(e) {
         var email = e.target.value
-        axios.post('http://localhost3001/account/check_email', {
+        axios.post('http://localhost3001/student/check_email', {
             email
         })
             .then(function (response) {
@@ -143,13 +141,13 @@ function SignUp(props) {
 
     }
     return (
-        <div className={"SignUp"}>
-            <Card style={{width: '600px', textAlign: "left"}}>
+        <div className={"StudentSignUp"}>
+            <Card style={{width: '60rem', textAlign: "left"}}>
 
                 <Form
                     {...formItemLayout}
                     form={form}
-                    style={{width: '500px', marginTop: 30}}
+                    style={{width: '50rem', marginTop: 30}}
                     name="register"
                     onFinish={onFinish}
                     scrollToFirstError
@@ -278,12 +276,24 @@ function SignUp(props) {
                     <Form.Item
                         name="first_name"
                         label="First name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your first name!'
+                            }
+                        ]}
                     >
                         <Input/>
                     </Form.Item>
                     <Form.Item
                         name="last_name"
                         label="Last name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your first name!'
+                            }
+                        ]}
                     >
                         <Input/>
                     </Form.Item>
@@ -314,4 +324,4 @@ function SignUp(props) {
     )
 }
 
-export default SignUp
+export default StudentSignUp

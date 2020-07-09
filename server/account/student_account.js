@@ -19,9 +19,9 @@ router.put('/create', function (req, res) {
     var last_name = req.body.lname;
     var agree = req.body.agreement;
 
-    var sql = 'INSERT INTO members (email, password, country, first_name, last_name, agreement, reg_date) ' +
-        'VALUES(?, ?, ?, ?, ?, ?, ?)';
-    var params = [email, pass, country, first_name, last_name, agree, time];
+    var sql = 'INSERT INTO members (email, password, country, first_name, last_name, agreement, reg_date, auth) ' +
+        'VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+    var params = [email, pass, country, first_name, last_name, agree, time, 'student'];
     connection.query(sql, params, function (err, rows, fields) {
         if (err) {
             res.send(err);
@@ -29,8 +29,8 @@ router.put('/create', function (req, res) {
         } else {
             res.send("Succeed");
         }
-    })
-})
+    });
+});
 
 //이메일 등록 여부 검사
 router.post('/check_email', function (req, res) {
@@ -48,14 +48,14 @@ router.post('/check_email', function (req, res) {
                 console.log('Error while performing Query.', err);
             }
         });
-})
+});
 
 //나라 목록 반환
 router.get('/get_countries', function (req, res) {
     /*console.log("countryList", countryList.getNames());*/
     res.send(countryList.getNames());
 
-})
+});
 
 // 해당 회원 정보 삭제
 router.delete('/delete', function (req, res) {
@@ -67,7 +67,7 @@ router.delete('/delete', function (req, res) {
         } else {
             res.send("Delete Succeed");
         }
-    })
+    });
 });
 
 //로그인 시 id, password 체크
@@ -81,6 +81,6 @@ router.post('/login', (req, res) => {
                 console.log('Error while performing Query.', err);
             }
         });
-})
+});
 
 module.exports = router;

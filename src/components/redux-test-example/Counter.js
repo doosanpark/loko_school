@@ -3,7 +3,7 @@ import Value from "./Value";
 import Control from "./Control";
 import {connect} from "react-redux";
 
-import * as actions from '../redux/actions/action'
+import * as actions from '../../redux/actions/action'
 
 
 function Counter(props) {

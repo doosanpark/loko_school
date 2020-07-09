@@ -95,7 +95,7 @@ function LogIn(props) {
                         remember: true,
                     }}
                     onFinish={onFinish}
-                    style={{marginTop: '24px', width: 800}}
+                    style={{marginTop: '2.4rem', width: '80rem'}}
                 >
                     <Form.Item
                         label="E-mail"
@@ -107,7 +107,7 @@ function LogIn(props) {
                             },
                         ]}
                     >
-                        <Input style={{width: "350px"}}/>
+                        <Input style={{width: "35rem"}}/>
                     </Form.Item>
 
                     <Form.Item
@@ -120,7 +120,7 @@ function LogIn(props) {
                             },
                         ]}
                     >
-                        <Input.Password style={{width: "350px"}}/>
+                        <Input.Password style={{width: "35rem"}}/>
                     </Form.Item>
 
                     <Form.Item {...tailLayout} name="remember" valuePropName="checked">
@@ -128,7 +128,7 @@ function LogIn(props) {
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="Log In" style={{width: "350px", marginRight: "10px"}}>
+                        <Button type="primary" htmlType="Log In" style={{width: "35rem", marginRight: "1rem"}}>
                             Log In
                         </Button>
                     </Form.Item>
@@ -139,7 +139,7 @@ function LogIn(props) {
                                 Sign Up
                             </Button>
                         </Link>
-                        <Divider type={"vertical"} style={{margin: '0px 20px'}}/>
+                        <Divider type={"vertical"} style={{margin: '0rem 2rem'}}/>
                         <Link to={"/find_account"}>
                             <Button type="link" style={{padding: 0, color: '#cccccc'}}>
                                 Forgot E-mail or Password?
