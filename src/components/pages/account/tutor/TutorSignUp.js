@@ -6,13 +6,13 @@ import {
     Button,
     Card,
     Modal,
-    AutoComplete
+    Select,
+    AutoComplete,
+    Upload
 } from 'antd';
 import {Link} from "react-router-dom";
-import "../../../css/TutorSignUp.less"
+import "src/css/TutorSignUp.less";
 import axios from 'axios';
-
-const {success} = Modal;
 
 const formItemLayout = {
     labelCol: {
@@ -45,13 +45,27 @@ const tailFormItemLayout = {
     },
 };
 
+const categoryOptions = ['Movie', 'Drama', 'Music', 'Society', 'Celebrities', 'Schoollife', 'History', 'Food', 'Business'];
+
 function TutorSignUp(props) {
     const [form] = Form.useForm();
-    const [countryList, setCountryList] = useState([]);
     const [emailValidation, setEmailValidation] = useState(true);
     const [passLength, setPassLength] = useState(0);
-    const [options, setOptions] = useState([]);
     const [fieldList, setFieldList] = useState([]);
+    const [fileList, setFileList] = useState([]);
+
+    //국가 리스트
+    const [countryList, setCountryList] = useState([]);
+    const [countries, setCountries] = useState([]);
+
+
+    const [languageOptions, setLanguageOptions] = useState([]);
+    const [selectedLanguages, setSelectedLanguages] = useState([]);
+    const filteredLanguages = languageOptions.filter(o => !selectedLanguages.includes(o));
+
+
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const filteredOptions = categoryOptions.filter(o => !selectedCategories.includes(o));
 
 
     const handleSearchFromCountries = value => { //국가 리스트를 가져오는 함수
@@ -67,7 +81,7 @@ function TutorSignUp(props) {
             }
         })
 
-        setOptions(
+        setCountries(
             list
         );
     };
@@ -75,7 +89,7 @@ function TutorSignUp(props) {
     const handleSearchFromFields = value => { //전문 분야 목록을 가져옴
 
         let field = value;
-        axios.post('http://localhost:3001/account/tutor/check_field', {
+        axios.post('http://localhost:3001/account/tutor/check_tags', {
             field
         })
             .then(function (response) {
@@ -95,24 +109,34 @@ function TutorSignUp(props) {
             }
         })
 
-        setOptions(
+        setCountries(
             list
         );
     };
 
 
+    const onUploadChange = ({fileList: newFileList}) => {
+        setFileList(newFileList);
+    };
+
+
     //Register 버튼을 눌렀을 회원 정보 등록
     const onFinish = values => {
+        let categoryToString = values.category.join(',');
+        console.log("categoryToString", fileList);
+
         axios.put('http://localhost:3001/account/tutor/create', {
             /*body: JSON.stringify(props)*/
             email: values.email,
             pass: values.password,
             country: values.country,
-            fname: values.first_name,
-            lname: values.last_name,
-            language: values.language,
-            personality: values.personality,
-            agreement: values.agreement
+            first_name: values.first_name,
+            last_name: values.last_name,
+            lang: values.language,
+            category: categoryToString,
+            tags: values.tags,
+            agreement: values.agreement,
+            fileList: fileList
         }).then(response => {
             console.log("res", response);
             var msg = response.data;
@@ -148,7 +172,32 @@ function TutorSignUp(props) {
         });
     }
 
-    useEffect(getCountries, []);
+    //페이지 렌더링 시에 언어 목록 가져옴
+    const getLanguages = () => {
+        axios.get('http://localhost:3001/account/tutor/get_languages')
+            .then(function (response) {
+
+                let languages = response.data;
+                let lang_datas = [];
+                for(let i = 0; i < languages.length; i++){
+                    lang_datas = lang_datas.concat(languages[i].korean);
+                }
+                for(let i = 0; i < languages.length; i++){
+                    lang_datas = lang_datas.concat(languages[i].english);
+                }
+                setLanguageOptions(lang_datas);
+
+                console.log("languages", lang_datas);
+
+            }).catch(function (error) {
+            console.log("err", error);
+        });
+    }
+
+    useEffect(() => {
+        getCountries();
+        getLanguages();
+    }, []);
 
     // E-mail이 현재 등록된 상태인지 확인
     function handleBlur(e) {
@@ -170,12 +219,35 @@ function TutorSignUp(props) {
             }).catch(function (error) {
             console.log("getPost error", error);
         });
-
     }
+
+    const onPreview = async file => {
+        let src = file.url;
+        if (!src) {
+            src = await new Promise(resolve => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file.originFileObj);
+                reader.onload = () => resolve(reader.result);
+            });
+        }
+        const image = new Image();
+        image.src = src;
+        const imgWindow = window.open(src);
+        imgWindow.document.write(image.outerHTML);
+    };
 
     return (
         <div className={"TutorSignUp"}>
             <Card style={{width: '60rem', textAlign: "left"}}>
+                <Upload
+                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    listType="picture-card"
+                    fileList={fileList}
+                    onChange={onUploadChange}
+                    onPreview={onPreview}
+                >
+                    {fileList.length < 1 && '+ Upload'}
+                </Upload>
 
                 <Form
                     {...formItemLayout}
@@ -218,6 +290,7 @@ function TutorSignUp(props) {
                     <Form.Item
                         name="password"
                         label="Password"
+                        initialValue={"Teacher1!@"}
                         rules={[
                             {
                                 required: true,
@@ -255,10 +328,12 @@ function TutorSignUp(props) {
                         ]}
                         hasFeedback
                     >
-                        <Input.Password onChange={
-                            (e) => {
-                                setPassLength(e.target.value.length);
-                            }}
+                        <Input.Password
+
+                            onChange={
+                                (e) => {
+                                    setPassLength(e.target.value.length);
+                                }}
                         />
                     </Form.Item>
 
@@ -266,6 +341,7 @@ function TutorSignUp(props) {
                         name="confirm"
                         label="Confirm Password"
                         dependencies={['password']}
+                        initialValue={"Teacher1!@"}
                         hasFeedback
                         rules={[
                             {
@@ -299,7 +375,8 @@ function TutorSignUp(props) {
                     >
                         {/*<Input onChange={searchCountry}/>*/}
                         <AutoComplete
-                            options={options}
+                            defaultValue={"Korea, Republic of"}
+                            options={countries}
                             onSearch={handleSearchFromCountries}
                         />
 
@@ -315,7 +392,7 @@ function TutorSignUp(props) {
                             }
                         ]}
                     >
-                        <Input/>
+                        <Input defaultValue={"Doosan"}/>
                     </Form.Item>
                     <Form.Item
                         name="last_name"
@@ -327,7 +404,7 @@ function TutorSignUp(props) {
                             }
                         ]}
                     >
-                        <Input/>
+                        <Input defaultValue={"Park"}/>
                     </Form.Item>
                     <Form.Item
                         name="language"
@@ -335,38 +412,61 @@ function TutorSignUp(props) {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your first name!'
+                                message: 'Please select languages!!'
                             }
                         ]}
                     >
-                        <Input/>
+                        <Select
+                            mode="multiple"
+                            placeholder="Select languages"
+                            value={selectedLanguages}
+                            onChange={items => setSelectedLanguages(items)}
+                        >
+                            {
+                                filteredLanguages.map(item => (
+                                    <Select.Option key={item} value={item}>
+                                        {item}
+                                    </Select.Option>
+                                ))
+                            }
+                        </Select>
+
                     </Form.Item>
                     <Form.Item
-                        name="personality"
-                        label="Personality"
+                        name="category"
+                        label="Category"
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your first name!'
+                                message: 'Please select categories!'
                             }
                         ]}
                     >
-                        <Input/>
+                        <Select
+                            mode="multiple"
+                            placeholder="Select your Specialties"
+                            value={selectedCategories}
+                            onChange={items => setSelectedCategories(items)}
+                        >
+                            {
+                                filteredOptions.length > 5 ?
+                                    filteredOptions.map(item => (
+                                        <Select.Option key={item} value={item}>
+                                            {item}
+                                        </Select.Option>
+                                    )) : ('')
+                            }
+                        </Select>
                     </Form.Item>
 
                     <Form.Item
-                        name="field"
-                        label="Fields of Specialty"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your fields!'
-                            }
-                        ]}
+                        name="tags"
+                        label="Tags"
                     >
 
                         <AutoComplete
-                            options={options}
+                            defaultValue={"K-POP"}
+                            options={countries}
                             onSearch={handleSearchFromFields}
                         />
 

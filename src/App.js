@@ -12,52 +12,54 @@ import {
 
 import {connect} from 'react-redux';
 
-import Home from "./components/home/Home";
-import Process from "./components/process/Process";
-import LogIn from "./components/account/LogIn";
-import StudentSignUp from "./components/account/student/StudentSignUp";
+import Home from "./components/pages/home/Home";
+import Process from "./components/pages/process/Process";
+import LogIn from "./components/pages/account/LogIn";
+import StudentSignUp from "./components/pages/account/student/StudentSignUp";
 import Footer from "./components/footer/Footer";
-import MyClass from "./components/myclass/MyClass";
+import MyClass from "./components/pages/myclass/MyClass";
 import {logOut} from "./redux/actions/authentication";
-import Reservation from "./components/reservation/Reservation";
-import TutorSignUp from "./components/account/tutor/TutorSignUp";
-
+import Reservation from "./components/pages/reservation/Reservation";
+import TutorSignUp from "./components/pages/account/tutor/TutorSignUp";
 
 function usePageViews() {
     let location = useLocation();
     return (location.pathname)
 }
 
-
 function App(props) {
 
     const [current, setCurrent] = useState(usePageViews());
     const [modalState, setModalState] = useState(false);
 
-
     function confirmLogOut(logOutState) {
-        Modal.confirm({
+        Modal.warning({
             content: ' 로그아웃 하시겠습니까?',
             onOk: () => {
                 //OK 버튼을 누르면 login 화면으로 이동
 
-                if(logOutState==="session"){
+                if (logOutState === "session") {
                     sessionStorage.removeItem("id");
                     sessionStorage.removeItem("pass");
                     sessionStorage.removeItem("login_status");
                     props.logOut();
                     setModalState(false);
                 }
-                if(logOutState==="local"){
+                if (logOutState === "local") {
                     localStorage.removeItem("id");
                     localStorage.removeItem("pass");
                     localStorage.removeItem("login_status");
                     props.logOut();
                     setModalState(false);
                 }
+                Modal.success({
+                    content: ' 로그아웃에 성공하셨습니다.',
+                    okText: '확인',
+                })
+
             },
             okText: '확인',
-            cancelText: '취소',
+            cancelText: '취소'
         })
     }
 
@@ -83,22 +85,28 @@ function App(props) {
                                 }}>Log Out</Button>
                             ) : (
                                 sessionStorage.getItem("login_status") ? (
-
                                     <Button style={{fontSize: 15, color: "primary"}} type={"link"} onClick={() => {
                                         confirmLogOut("session");
                                     }}>Log Out</Button>
 
                                 ) : (
                                     <Link to={"/login"}>
-                                        <Button style={{fontSize: 15, color: "primary"}} type={"link"}>Log In</Button>
+                                        <Button style={{fontSize: 15, color: "primary"}} type={"link"}
+                                                onClick={() => {
+                                                    setCurrent("blank");
+                                                }}
+                                        >Log In</Button>
                                     </Link>
                                 )
                             )}
 
-
                         <Divider style={{height: 20}} type={"vertical"}/>
                         <Link to={"/myclass"}>
-                            <Button style={{fontSize: 15, color: "primary"}} type={"link"}>My Class</Button>
+                            <Button style={{fontSize: 15, color: "primary"}} type={"link"}
+                                    onClick={() => {
+                                        setCurrent("blank");
+                                    }}
+                            >My Class</Button>
                         </Link>
                     </div>
 
@@ -107,7 +115,11 @@ function App(props) {
 
                     <Menu
                         selectedKeys={current}
-                        onClick={() => setCurrent(usePageViews)}
+                        onClick={() => {
+                            setCurrent(usePageViews)
+                        }}
+
+                        onDeselect={() => console.log("onDeselect")}
                         className={"App__Menu"}
                         style={{
                             width: '100%',
@@ -118,6 +130,11 @@ function App(props) {
                         }}
                         mode="horizontal">
 
+                        <Menu.Item
+                            disabled={true}
+                            style={{marginRight: "5%", color: 'white'}}
+                            key="/blank">
+                        </Menu.Item>
                         <Menu.Item
                             style={{marginRight: "5%"}}
                             key="/home">

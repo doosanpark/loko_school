@@ -8,7 +8,7 @@ import {
     Modal,
     AutoComplete
 } from 'antd';
-import "../../../css/StudentSignUp.less"
+import "src/css/StudentSignUp.less"
 import axios from 'axios';
 
 const {success} = Modal;

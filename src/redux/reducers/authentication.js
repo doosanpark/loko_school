@@ -3,7 +3,7 @@ import {
     AUTH_LOGIN_FAILURE,
     AUTH_LOGIN_SUCCESS,
     AUTH_LOGOUT
-} from "../actions/ActionTypes";
+} from "src/redux/actions/ActionTypes";
 
 const initialState = {
     login: {

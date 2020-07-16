@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import '../../css/Home.less'
+import 'src/css/Home.less'
 
 import {Carousel} from 'antd';
 import 'antd/dist/antd.less';

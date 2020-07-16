@@ -3,11 +3,10 @@ import Value from "./Value";
 import Control from "./Control";
 import {connect} from "react-redux";
 
-import * as actions from '../../redux/actions/action'
+import * as actions from 'src/redux/actions/action'
 
 
 function Counter(props) {
-
 
     function setRandomColor() {
         const color = [

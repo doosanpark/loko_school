@@ -4,7 +4,7 @@ import scriptLoader from "react-async-script-loader";
 
 const CLIENT = {
     sandbox:
-        "sb-fseji2547787@business.example.com",
+        "AW_ycS9YR9CTcnR-_GNXkYiIqQ_UhC9R4f8GUJ9Cu96sfkBJofg1YGLgRU5wbcgEO3pmQ9A_HxDycath",
     production:
         "your_production_key"
 };
@@ -12,9 +12,7 @@ const CLIENT = {
 const CLIENT_ID =
     process.env.NODE_ENV === "production" ? CLIENT.production : CLIENT.sandbox;
 
-let PayPalButton = null;
-
-
+let PayPalButtons = null;
 
 //참고 사이트(베껴옴): https://medium.com/@bolajifemi28/how-to-add-paypal-checkout-to-your-react-app-37d44c58a896
 class PaypalButton extends React.Component {
@@ -32,30 +30,31 @@ class PaypalButton extends React.Component {
     }
 
     componentDidMount() {
-        const { isScriptLoaded, isScriptLoadSucceed } = this.props;
+        const {isScriptLoaded, isScriptLoadSucceed} = this.props;
 
         if (isScriptLoaded && isScriptLoadSucceed) {
-            PayPalButton = window.paypal.Buttons.driver("react", { React, ReactDOM });
-            this.setState({ loading: false, showButtons: true });
+            PayPalButtons = window.paypal.Buttons.driver("react", {React, ReactDOM});
+            this.setState({loading: false, showButtons: true});
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        const { isScriptLoaded, isScriptLoadSucceed } = nextProps;
+        const {isScriptLoaded, isScriptLoadSucceed} = nextProps;
 
         const scriptJustLoaded =
             !this.state.showButtons && !this.props.isScriptLoaded && isScriptLoaded;
 
         if (scriptJustLoaded) {
             if (isScriptLoadSucceed) {
-                PayPalButton = window.paypal.Buttons.driver("react", {
+                PayPalButtons = window.paypal.Buttons.driver("react", {
                     React,
                     ReactDOM
                 });
-                this.setState({ loading: false, showButtons: true });
+                this.setState({loading: false, showButtons: true});
             }
         }
     }
+
     createOrder = (data, actions) => {
         return actions.order.create({
             purchase_units: [
@@ -63,7 +62,7 @@ class PaypalButton extends React.Component {
                     description: +"Mercedes G-Wagon",
                     amount: {
                         currency_code: "USD",
-                        value: 1  //가격정보
+                        value: 0.01  //가격정보
                     }
                 }
             ]
@@ -76,13 +75,14 @@ class PaypalButton extends React.Component {
                 payerID: data.payerID,
                 orderID: data.orderID
             };
+            console.log('details ' + details);
             console.log("Payment Approved: ", paymentData);
-            this.setState({ showButtons: false, paid: true });
+            this.setState({showButtons: false, paid: true});
         });
     };
 
     render() {
-        const { showButtons, loading, paid } = this.state;
+        const {showButtons, loading, paid} = this.state;
 
         return (
             <div className="main">
@@ -95,8 +95,8 @@ class PaypalButton extends React.Component {
                             <h2>Total checkout Amount $200</h2>
                         </div>
 
-                        <PayPalButton
-                            createOrder={(data, actions) => this.createOrder(data, actions)}
+                        <PayPalButtons
+                            createOrdder={(data, actions) => this.createOrder(data, actions)}
                             onApprove={(data, actions) => this.onApprove(data, actions)}
                         />
                     </div>
@@ -109,8 +109,7 @@ class PaypalButton extends React.Component {
                             you'll be able to afford the car itself{" "}
                             <span role="img" aria-label="emoji">
                 {" "}
-                                😉
-              </span>
+                                😉</span>
                         </h2>
                     </div>
                 )}
@@ -120,4 +119,4 @@ class PaypalButton extends React.Component {
 }
 
 
-export default scriptLoader(`https://www.paypal.com/sdk/js?client-id=${"Aa4sIrj2Ex6QDzNybyMo-Q7XqHeF3IiUrzg2A7b8kt0ZtdL3uEDQ9q2B1l790ZNWUe3-aiRScVk5ifyX"}`)(PaypalButton);
+export default scriptLoader(`https://www.paypal.com/sdk/js?client-id=${"AW_ycS9YR9CTcnR-_GNXkYiIqQ_UhC9R4f8GUJ9Cu96sfkBJofg1YGLgRU5wbcgEO3pmQ9A_HxDycath"}`)(PaypalButton);

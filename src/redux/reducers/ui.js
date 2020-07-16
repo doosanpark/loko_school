@@ -1,6 +1,6 @@
 import {
     SET_COLOR
-} from "../actions/ActionTypes";
+} from "src/redux/actions/ActionTypes";
 
 const initialState = {
     color: [0, 0, 0]

@@ -1,14 +1,11 @@
 import React, {useState} from 'react'
-import '../../css/LogIn.less'
-import {Card, Carousel, Input, Form, Checkbox, Button, Divider, Modal} from "antd";
+import 'src/css/LogIn.less'
+import {Input, Form, Checkbox, Button, Divider, Modal} from "antd";
 import {Link} from "react-router-dom"
 import axios from "axios";
 
 import {connect} from 'react-redux';
-import {loginSuccess} from "../../redux/actions/authentication";
-
-import PropTypes from 'prop-types';
-import {AUTH_LOGIN_FAILURE} from "../../redux/actions/ActionTypes";
+import {loginSuccess} from "src/redux/actions/authentication";
 
 const layout = {
     labelCol: {
