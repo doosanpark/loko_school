@@ -8,8 +8,7 @@ import {
     Modal,
     AutoComplete
 } from 'antd';
-import {Link} from "react-router-dom";
-import "../../../css/TutorSignUp.less"
+import "../../../css/StudentSignUp.less"
 import axios from 'axios';
 
 const {success} = Modal;
@@ -45,7 +44,7 @@ const tailFormItemLayout = {
     },
 };
 
-function TutorSignUp(props) {
+function StudentSignUp(props) {
     const [form] = Form.useForm();
     const [countryList, setCountryList] = useState([]);
     const [emailValidation, setEmailValidation] = useState(true);
@@ -70,9 +69,11 @@ function TutorSignUp(props) {
         );
     };
 
+
+
     //Register 버튼을 눌렀을 회원 정보 등록
     const onFinish = values => {
-        axios.put('http://localhost:3001/tutor/create', {
+        axios.put('http://localhost:3001/account/student/create', {
             /*body: JSON.stringify(props)*/
             email: values.email,
             pass: values.password,
@@ -108,7 +109,7 @@ function TutorSignUp(props) {
 
     //페이지 렌더링 시에 나라 목록 가져옴
     const getCountries = () => {
-        axios.get('http://localhost:3001/tutor/get_countries')
+        axios.get('http://localhost:3001/account/student/get_countries')
             .then(function (response) {
                 setCountryList(response.data);
             }).catch(function (error) {
@@ -120,7 +121,7 @@ function TutorSignUp(props) {
     // E-mail이 현재 등록된 상태인지 확인
     function handleBlur(e) {
         var email = e.target.value
-        axios.post('http://localhost3001/tutor/check_email', {
+        axios.post('http://localhost:3001/account/student/check_email', {
             email
         })
             .then(function (response) {
@@ -140,7 +141,7 @@ function TutorSignUp(props) {
 
     }
     return (
-        <div className={"TutorSignUp"}>
+        <div className={"StudentSignUp"}>
             <Card style={{width: '60rem', textAlign: "left"}}>
 
                 <Form
@@ -272,7 +273,6 @@ function TutorSignUp(props) {
 
                     </Form.Item>
 
-
                     <Form.Item
                         name="first_name"
                         label="First name"
@@ -288,30 +288,6 @@ function TutorSignUp(props) {
                     <Form.Item
                         name="last_name"
                         label="Last name"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your first name!'
-                            }
-                        ]}
-                    >
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item
-                        name="language"
-                        label="Possible Language"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your first name!'
-                            }
-                        ]}
-                    >
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item
-                        name="personality"
-                        label="Personality"
                         rules={[
                             {
                                 required: true,
@@ -348,4 +324,4 @@ function TutorSignUp(props) {
     )
 }
 
-export default TutorSignUp
+export default StudentSignUp

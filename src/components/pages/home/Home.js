@@ -14,6 +14,7 @@ function Home() {
                 <div style={{
                     width: '80rem',
                     fontSize: '3rem',
+                    textAlign: "left",
                     marginTop: '13rem',
                     marginLeft: '10rem',
                     lineHeight: '4rem'

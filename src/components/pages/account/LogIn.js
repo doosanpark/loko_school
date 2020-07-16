@@ -65,7 +65,7 @@ function LogIn(props) {
                 Modal.success({
                     content: "Welcome to Loko School!",
                     onOk: () => {
-                        props.history.push("/");
+                        props.history.push("/home");
                     }
                 });
             } else {
@@ -147,8 +147,6 @@ function LogIn(props) {
                         </Link>
                     </Form.Item>
                 </Form>
-
-
             </div>
         </div>
     )
