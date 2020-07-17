@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const multer = require('multer');
 
 var pool = require('../database');
 
@@ -7,63 +8,93 @@ var dateFormat = require('dateformat');
 var time = dateFormat(new Date(), "yyyy-mm-dd");
 const countryList = require('country-list');
 
+
+const storage = multer.diskStorage({
+    destination: function(req, res, callback) {
+        callback(null, "tmp/");
+    },
+});
+
+const upload = multer({
+    storage: storage,
+});
+
+
+
+router.put('/create', upload.array('files'));
 // 회원 계정 생성/등록
 router.put('/create', async (req, res, next) => {
     var conn = await pool.getConnection();
 
-    var {email, pass, country, first_name, last_name, lang, category, tags, agreement} = req.body;
-    console.log("lang", lang.split(','));
-    console.log("category", category.split(','));
-    console.log("tags", tags);
+    var {email, pass, country, first_name, last_name, lang, category, tags, agreement, formData} = req.body;
 
-    try {
-        await conn.beginTransaction() // 트랜잭션 적용 시작
+    const file = formData;
+    console.log("formData", upload.array('files'));
+    const files = req.files;	// 받은 파일들의 객체 배열
 
-        var input_mem = 'INSERT INTO members (email, password, country, first_name, last_name, agreement, reg_date, auth) ' +
-            'VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
-        var params = [email, pass, country, first_name, last_name, agreement, time, 'tutor'];
-        var result = await conn.query(input_mem, params);
-        var mem_id = result[0].insertId;
 
-        //category 테이블에 데이터 입력
-        var sql = 'INSERT INTO categories (category) VALUES(?)';
-        var params = [category];
-        var cat_id = await conn.query(sql, params);
+    /*
+        try {
+            await conn.beginTransaction() // 트랜잭션 적용 시작
 
-        //connect_member_category 테이블에 키 입력
-        var sql = 'INSERT INTO connect_member_category (mem_id, cat_id) VALUES(?, ?)';
-        var params = [mem_id[0][0].id, cat_id[0][0].id];
-        var conn_mem_cat = await conn.query(sql, params);
+            var input_mem = 'INSERT INTO members (email, password, country, first_name, last_name, agreement, reg_date, auth) ' +
+                'VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+            var params = [email, pass, country, first_name, last_name, agreement, time, 'tutor'];
+            var result = await conn.query(input_mem, params);
+            var mem_id = result[0].insertId;
 
-        //tags 테이블에 데이터 입력
-        var sql = 'INSERT INTO tutor_tags (tag) VALUES(?)';
-        var params = [tags];
-        var tag_id = await conn.query(sql, params);
+            for(let i = 0; i < category.length; i++) {
+                //category 테이블에 데이터 입력
+                var sql = 'INSERT INTO categories (category) VALUES(?)';
+                var params = [category[i]];
+                var cat_id = await conn.query(sql, params);
 
-        //connect_member_tutor_tag 테이블에 키 입력
-        var sql = 'INSERT INTO connect_member_tutor_tag (mem_id, tag_id) VALUES(?, ?)';
-        var params = [mem_id[0][0].id, tag_id[0][0].id];
-        var conn_mem_tag = await conn.query(sql, params);
+                //connect_member_category 테이블에 키 입력
+                var sql = 'INSERT INTO connect_member_category (mem_id, cat_id) VALUES(?, ?)';
+                var params = [mem_id, cat_id[0].insertId];
+                var conn_mem_cat = await conn.query(sql, params);
+                /!*console.log("category "+i, conn_mem_cat);*!/
+            }
 
-        //lang 테이블에 데이터 입력
-        var sql = 'INSERT INTO possible_lang (lang) VALUES(?)';
-        var params = [lang];
-        var lang_id = await conn.query(sql, params);
 
-        //connect_member_language 테이블에 키 입력
-        var sql = 'INSERT INTO connect_member_language (mem_id, lang) VALUES(?, ?)';
-        var params = [mem_id[0][0].id, lang_id[0][0].id];
-        var conn_mem_language = await conn.query(sql, params);
+            for(let i = 0; i < tags.length; i++) {
+                //tags 테이블에 데이터 입력
+                var sql = 'INSERT INTO tutor_tags (tag) VALUES(?)';
+                var params = [tags[i]];
+                var tag_id = await conn.query(sql, params);
 
-        await conn.commit(); // 커밋
-        return res.send('succeed');
-    } catch (err) {
-        console.log("에러", err)
-        conn.rollback()
-        return res.status(500).json(err)
-    } finally {
-        conn.release() // pool에 conn 반납
-    }
+                //connect_member_tutor_tag 테이블에 키 입력
+                var sql = 'INSERT INTO connect_member_tutor_tag (mem_id, tag_id) VALUES(?, ?)';
+                var params = [mem_id, tag_id[0].insertId];
+                var conn_mem_tag = await conn.query(sql, params);
+
+                /!*console.log("tags "+i, conn_mem_tag);*!/
+            }
+
+            for(let i = 0; i < lang.length; i++) {
+                //lang 테이블에 데이터 입력
+                var sql = 'INSERT INTO possible_lang (lang) VALUES(?)';
+                var params = [lang[i]];
+                var lang_id = await conn.query(sql, params);
+
+                //connect_member_language 테이블에 키 입력
+                var sql = 'INSERT INTO connect_member_language (mem_id, lang) VALUES(?, ?)';
+                var params = [mem_id, lang_id[0].insertId];
+                var conn_mem_language = await conn.query(sql, params);
+
+                /!*console.log("language "+i, conn_mem_language);*!/
+            }
+
+
+            await conn.commit(); // 커밋
+            return res.send('succeed');
+        } catch (err) {
+            /!*console.log("에러", err);*!/
+            conn.rollback();
+            return res.status(500).json(err);
+        } finally {
+            conn.release() // pool에 conn 반납
+        }*/
 
 });
 
@@ -128,6 +159,7 @@ router.post('/check_tags', async function (req, res) {
     /*console.log("req", req.body);*/
 
     try {
+        const {tag} = req.body;
         var conn = await pool.getConnection();
 
         var sql = 'SELECT * FROM tutor_tags WHERE tag LIKE ? \n' +
@@ -138,9 +170,9 @@ router.post('/check_tags', async function (req, res) {
             '              ELSE 4 \n' +
             '          END \n' +
             'LIMIT 6 ';
-        var params = ["%" + req.body.tag + "%", req.body.tag, req.body.tag + "%", "%" + req.body.tag + "%", "%" + req.body.tag];
+        var params = ["%" + tag + "%", tag, tag + "%", "%" + tag + "%", "%" + tag];
         var rows = await conn.query(sql, params);
-
+        console.log(tag, rows);
         return res.send(rows[0]);
 
     } catch (err) {

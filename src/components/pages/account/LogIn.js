@@ -47,7 +47,7 @@ function LogIn(props) {
             if (msg !== []) {
                 setUserName(msg[0].first_name);
                 props.loginSucceed(msg[0].first_name);
-                console.log("리멤버", values);
+                /*console.log("리멤버", values);*/
                 if (values.remember) {
                     localStorage.setItem("id", values.email);
                     localStorage.setItem("pass", values.password);
@@ -83,7 +83,6 @@ function LogIn(props) {
 
     return (
         <div className={"LogIn"}>
-
             <div className={"LogIn__Form"}>
                 <Form
                     {...layout}
@@ -92,7 +91,7 @@ function LogIn(props) {
                         remember: true,
                     }}
                     onFinish={onFinish}
-                    style={{marginTop: '2.4rem', width: '80rem'}}
+                    style={{marginTop: '2.4rem', width: '80rem', textAlign: "left"}}
                 >
                     <Form.Item
                         label="E-mail"
