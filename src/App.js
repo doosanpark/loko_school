@@ -197,7 +197,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-
 const mapDispatchToProps = (dispatch) => {
     return {
         logOut: () => {
@@ -205,6 +204,5 @@ const mapDispatchToProps = (dispatch) => {
         }
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

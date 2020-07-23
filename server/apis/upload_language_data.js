@@ -7,11 +7,9 @@ const multer = require('multer');
 //로그인 시 id, password 체크
 router.put('/lang_data', async (req, res, next) => {
 
-
     /*console.log("req", req.body.lang_data);*/
 
     try {
-
 
         var conn = await pool.getConnection();
         const {lang_data} = req.body;
@@ -32,14 +30,11 @@ router.put('/lang_data', async (req, res, next) => {
     }
 });
 
-
-
 // 업로드된 파일을 "uploads/" 라는 폴더에 저장함.
 // 해당 폴더가 없을 경우 에러 발생.
 const storage = multer.diskStorage({
     destination: function(req, res, callback) {
         callback(null, "C:\\Users\\user\\Documents\\Developer\\Project\\loko_school\\server\\apis\\uploads");
-
     },
 });
 
@@ -48,12 +43,15 @@ const upload = multer({
 });
 
 // 'files'는 프론트에서 보내온 file들이 저장된 formdata의 key입니다
-router.post('/board', upload.array('files'), (req, res) => {
+router.post('/board', upload.array('files'));
+router.post('/board', (req, res) => {
     const title = req.body.title;	// 프론트에서 설정한 'title' key의 value
     const contents = req.body.contents;	// 프론트에서 설정한 'contents' key의 value
-    const files = req.body.files;	// 받은 파일들의 객체 배열
-    // do something...
+    const files = req.files;	        // 받은 파일들의 객체 배열
+
     console.log("files", files);
+
+    // do something...
 });
 
 module.exports = router;

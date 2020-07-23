@@ -8,32 +8,15 @@ var dateFormat = require('dateformat');
 var time = dateFormat(new Date(), "yyyy-mm-dd");
 const countryList = require('country-list');
 
-
-const storage = multer.diskStorage({
-    destination: function(req, res, callback) {
-        callback(null, "tmp/");
-    },
-});
-
-const upload = multer({
-    storage: storage,
-});
-
-
+const upload = multer({ dest: 'uploads/', limits: { fileSize: 5 * 1024 * 1024 } });
 
 router.put('/create', upload.array('files'));
 // 회원 계정 생성/등록
 router.put('/create', async (req, res, next) => {
     var conn = await pool.getConnection();
 
-    var {email, pass, country, first_name, last_name, lang, category, tags, agreement, formData} = req.body;
+    var {email, pass, country, first_name, last_name, lang, category, tags, agreement} = req.body;
 
-    const file = formData;
-    console.log("formData", upload.array('files'));
-    const files = req.files;	// 받은 파일들의 객체 배열
-
-
-    /*
         try {
             await conn.beginTransaction() // 트랜잭션 적용 시작
 
@@ -45,17 +28,16 @@ router.put('/create', async (req, res, next) => {
 
             for(let i = 0; i < category.length; i++) {
                 //category 테이블에 데이터 입력
-                var sql = 'INSERT INTO categories (category) VALUES(?)';
+                var sql = 'INSERT INTO tutor_categories (category) VALUES(?)';
                 var params = [category[i]];
                 var cat_id = await conn.query(sql, params);
 
-                //connect_member_category 테이블에 키 입력
-                var sql = 'INSERT INTO connect_member_category (mem_id, cat_id) VALUES(?, ?)';
+                //connect_getSimilarData_category 테이블에 키 입력
+                var sql = 'INSERT INTO connect_tutor_category (mem_id, cat_id) VALUES(?, ?)';
                 var params = [mem_id, cat_id[0].insertId];
                 var conn_mem_cat = await conn.query(sql, params);
-                /!*console.log("category "+i, conn_mem_cat);*!/
+                /*console.log("category "+i, conn_mem_cat);*/
             }
-
 
             for(let i = 0; i < tags.length; i++) {
                 //tags 테이블에 데이터 입력
@@ -63,38 +45,37 @@ router.put('/create', async (req, res, next) => {
                 var params = [tags[i]];
                 var tag_id = await conn.query(sql, params);
 
-                //connect_member_tutor_tag 테이블에 키 입력
-                var sql = 'INSERT INTO connect_member_tutor_tag (mem_id, tag_id) VALUES(?, ?)';
+                //connect_getSimilarData_tutor_tag 테이블에 키 입력
+                var sql = 'INSERT INTO connect_tutor_tag (mem_id, tag_id) VALUES(?, ?)';
                 var params = [mem_id, tag_id[0].insertId];
                 var conn_mem_tag = await conn.query(sql, params);
 
-                /!*console.log("tags "+i, conn_mem_tag);*!/
+                /*console.log("tags "+i, conn_mem_tag);*/
             }
 
             for(let i = 0; i < lang.length; i++) {
                 //lang 테이블에 데이터 입력
-                var sql = 'INSERT INTO possible_lang (lang) VALUES(?)';
+                var sql = 'INSERT INTO tutor_possible_lang (lang) VALUES(?)';
                 var params = [lang[i]];
                 var lang_id = await conn.query(sql, params);
 
-                //connect_member_language 테이블에 키 입력
-                var sql = 'INSERT INTO connect_member_language (mem_id, lang) VALUES(?, ?)';
+                //connect_getSimilarData_language 테이블에 키 입력
+                var sql = 'INSERT INTO connect_tutor_lang (mem_id, lang_id) VALUES(?, ?)';
                 var params = [mem_id, lang_id[0].insertId];
                 var conn_mem_language = await conn.query(sql, params);
 
-                /!*console.log("language "+i, conn_mem_language);*!/
+                /*console.log("language "+i, conn_mem_language);*/
             }
-
 
             await conn.commit(); // 커밋
             return res.send('succeed');
         } catch (err) {
-            /!*console.log("에러", err);*!/
+            /*console.log("에러", err);*/
             conn.rollback();
             return res.status(500).json(err);
         } finally {
             conn.release() // pool에 conn 반납
-        }*/
+        }
 
 });
 

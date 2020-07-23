@@ -119,7 +119,6 @@ function TutorSignUp(props) {
             category: values.category,
             tags: values.tags,
             agreement: values.agreement,
-            fileList: fileList
         }).then(response => {
             console.log("res", response);
             var msg = response.data;
@@ -255,15 +254,18 @@ function TutorSignUp(props) {
         setFetching(false);
     };
 
-
     return (
         <div className={"TutorSignUp"}>
             <Card>
                 <div style={{width: '100rem', textAlign: "left", display: 'flex', flexDirection: 'row'}}>
                     <div style={{width: '60rem'}}>
                         <Upload
-                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                            listType="picture-card"
+                            name="files"
+                            multiple={true}
+                            className="avatar-uploader"
+                            showUploadList={false}
+                            action="http://localhost:3001/account/tutor/create"
+                            beforeUpload={(file) => setFileList(fileList.concat(file))}
                             fileList={fileList}
                             onChange={onUploadChange}
                             onPreview={onPreview}
