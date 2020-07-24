@@ -4,11 +4,10 @@ var search = require('../apis/search/search');
 var pool = require('../database.js');
 
 //로그인 시 id, password 체크
-router.post('/get_tutor_info', async (req, res, next) => {
+router.post('/get-tutor-infos', async (req, res, next) => {
     /*console.log("req", req.body.email);*/
     try {
         var conn = await pool.getConnection();
-
 
         var {tag, lang, category} = req.body;
         lang = 'korean';
@@ -43,7 +42,6 @@ router.post('/get_tutor_info', async (req, res, next) => {
         ids = Array.from(new Set(ids));
 
         console.log("---------------------------------------------");
-
 
         let resultTutorTagInfo = await search.searchFromMysql(
             {

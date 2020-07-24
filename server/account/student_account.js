@@ -30,7 +30,7 @@ router.put('/create', async (req, res, next) => {
 });
 
 //이메일 등록 여부 검사
-router.post('/check_email', async function (req, res) {
+router.post('/check-emails', async function (req, res) {
 
     /*console.log("req", req.body.email);*/
 
@@ -54,7 +54,7 @@ router.post('/check_email', async function (req, res) {
 
 
 //나라 목록 반환
-router.get('/get_countries', async (req, res, next) => {
+router.get('/get-countries', async (req, res, next) => {
     var conn = pool.getConnection();
     /*console.log("countryList", countryList.getNames());*/
     res.send(countryList.getNames());

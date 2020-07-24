@@ -34,7 +34,6 @@ async function getRelatedInfoFromLinkedTables(arg) {
         // id 리스트
         let idList = Array.from(rowsId, x => Object.values(x));
 
-
         // linked_tables로부터 연관 정보 테이블과 관련된 테이블 추출
         var tableNameAssociatedTag = await getData({
             searchKey: arg.tableName,

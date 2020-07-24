@@ -5,7 +5,7 @@ var pool = require('../database.js');
 const multer = require('multer');
 
 //로그인 시 id, password 체크
-router.put('/lang_data', async (req, res, next) => {
+router.put('/lang-datas', async (req, res, next) => {
 
     /*console.log("req", req.body.lang_data);*/
 
