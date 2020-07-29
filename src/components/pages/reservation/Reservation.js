@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import 'src/css/Reservation.less'
-import {Card} from 'antd';
 import PaypalButton from "src/components/apis/payment/PaypalButton";
 
 function Reservation() {

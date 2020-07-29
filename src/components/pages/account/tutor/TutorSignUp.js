@@ -108,7 +108,7 @@ function TutorSignUp(props) {
     //Register 버튼을 눌렀을 회원 정보 등록
     const onFinish = values => {
 
-        axios.put('http://localhost:3001/account/tutor/create', {
+        axios.put('/server/accounts/tutors/creates', {
             /*body: JSON.stringify(props)*/
             email: values.email,
             pass: values.password,
@@ -147,7 +147,7 @@ function TutorSignUp(props) {
 
     //페이지 렌더링 시에 나라 목록 가져옴
     const getCountries = () => {
-        axios.get('http://localhost:3001/account/tutor/get_countries')
+        axios.get('/server/accounts/tutors/get-countries')
             .then(function (response) {
                 setCountryList(response.data);
             }).catch(function (error) {
@@ -156,7 +156,7 @@ function TutorSignUp(props) {
 
     //페이지 렌더링 시에 언어 목록 가져옴
     const getLanguages = () => {
-        axios.get('http://localhost:3001/account/tutor/get_languages')
+        axios.get('/server/accounts/tutors/get-languages')
             .then(function (response) {
 
                 let languages = response.data;
@@ -184,7 +184,7 @@ function TutorSignUp(props) {
     // E-mail이 현재 등록된 상태인지 확인
     function handleBlur(e) {
         var email = e.target.value
-        axios.post('http://localhost:3001/account/tutor/check_email', {
+        axios.post('/server/accounts/tutors/check-emails', {
             email
         })
             .then(function (response) {
@@ -228,7 +228,7 @@ function TutorSignUp(props) {
         setTmpData(value);
 
         let tag = value;
-        axios.post('http://localhost:3001/account/tutor/check_tags', {
+        axios.post('/server/accounts/tutors/check-tags', {
             tag
         })
             .then(function (response) {
@@ -264,7 +264,7 @@ function TutorSignUp(props) {
                             multiple={true}
                             className="avatar-uploader"
                             showUploadList={false}
-                            action="http://localhost:3001/account/tutor/create"
+                            action="/server/accounts/tutors/creates"
                             beforeUpload={(file) => setFileList(fileList.concat(file))}
                             fileList={fileList}
                             onChange={onUploadChange}

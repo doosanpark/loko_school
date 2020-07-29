@@ -1,9 +1,8 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import 'src/css/Home.less'
 
 import {Carousel} from 'antd';
 import 'antd/dist/antd.less';
-import {connect} from "react-redux";
 import {Link} from "react-router-dom";
 
 function Home() {

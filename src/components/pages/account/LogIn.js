@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import 'src/css/LogIn.less'
 import {Input, Form, Checkbox, Button, Divider, Modal} from "antd";
 import {Link} from "react-router-dom"
@@ -22,21 +22,22 @@ const tailLayout = {
     },
 };
 
+/*
 const dividerLayout={
     wrapperCol: {
         offset: 4,
         span: 14,
     },
 }
+*/
 
 
 function LogIn(props) {
 
-    const [modalState, setModalState] = useState(true)
-    const [userName, setUserName] = useState("")
+    /*const [userName, setUserName] = useState("")*/
 
     const onFinish = values => {    //Log In 버튼을 눌렀을 때
-        axios.post('http://localhost:3001/account/login', {
+        axios.post('/server/accounts/login', {
             /*body: JSON.stringify(props)*/
             email: values.email,
             pass: values.password
@@ -45,7 +46,7 @@ function LogIn(props) {
 
             //입력한 id와 비밀번호가 있을 경우, redux에 로그인 정보 저장.
             if (msg !== []) {
-                setUserName(msg[0].first_name);
+                /*setUserName(msg[0].first_name);*/
                 props.loginSucceed(msg[0].first_name);
                 /*console.log("리멤버", values);*/
                 if (values.remember) {

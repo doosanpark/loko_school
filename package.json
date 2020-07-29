@@ -19,7 +19,7 @@
     "express": "4.17.1",
     "express-session": "1.17.1",
     "history": "5.0.0",
-    "http-proxy-middleware": "1.0.4",
+    "http-proxy-middleware": "1.0.5",
     "lodash": "4.17.19",
     "multer": "1.4.2",
     "mysql": "2.18.1",
@@ -40,7 +40,8 @@
     "react-tag-input": "6.4.3",
     "react-tagsinput": "3.19.0",
     "redux": "4.0.5",
-    "redux-thunk": "2.3.0"
+    "redux-thunk": "2.3.0",
+    "webpack-war-plugin": "1.0.0-beta.3"
   },
   "scripts": {
     "start": "npm-run-all --parallel start:**",
@@ -67,6 +68,6 @@
   },
   "devDependencies": {
     "axios": "0.19.2",
-    "babel-plugin-module-resolver": "4.0.0"
+    "concurrently": "5.2.0"
   }
 }

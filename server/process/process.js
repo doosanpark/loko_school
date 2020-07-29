@@ -53,8 +53,6 @@ router.post('/get-tutor-infos', async (req, res, next) => {
             }
         )
 
-
-
         console.log("resultTutorTagInfo", resultTutorTagInfo);
 
 /*

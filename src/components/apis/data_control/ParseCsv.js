@@ -32,7 +32,7 @@ class ParseCsv extends React.Component {
         var data = result.data;
         console.log(data);
 
-        axios.put('http://localhost:3001/process/lang_data', {
+        axios.put('/server/process/lang-datas', {
             lang_data: data
         }).then(response => {
             console.log("res", response);

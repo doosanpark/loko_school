@@ -73,7 +73,7 @@ function StudentSignUp(props) {
 
     //Register 버튼을 눌렀을 회원 정보 등록
     const onFinish = values => {
-        axios.put('http://localhost:3001/account/student/create', {
+        axios.put('/server/accounts/students/creates', {
             /*body: JSON.stringify(props)*/
             email: values.email,
             pass: values.password,
@@ -109,7 +109,7 @@ function StudentSignUp(props) {
 
     //페이지 렌더링 시에 나라 목록 가져옴
     const getCountries = () => {
-        axios.get('http://localhost:3001/account/student/get_countries')
+        axios.get('/server/accounts/students/get-countries')
             .then(function (response) {
                 setCountryList(response.data);
             }).catch(function (error) {
@@ -121,7 +121,7 @@ function StudentSignUp(props) {
     // E-mail이 현재 등록된 상태인지 확인
     function handleBlur(e) {
         var email = e.target.value
-        axios.post('http://localhost:3001/account/student/check_email', {
+        axios.post('/server/accounts/students/check-emails', {
             email
         })
             .then(function (response) {

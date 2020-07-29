@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './App.less';
 
 import {Divider, Menu, Button, Modal} from 'antd';
@@ -30,7 +30,6 @@ function usePageViews() {
 function App(props) {
 
     const [current, setCurrent] = useState(usePageViews());
-    const [modalState, setModalState] = useState(false);
 
     function confirmLogOut(logOutState) {
         Modal.warning({
@@ -43,14 +42,12 @@ function App(props) {
                     sessionStorage.removeItem("pass");
                     sessionStorage.removeItem("login_status");
                     props.logOut();
-                    setModalState(false);
                 }
                 if (logOutState === "local") {
                     localStorage.removeItem("id");
                     localStorage.removeItem("pass");
                     localStorage.removeItem("login_status");
                     props.logOut();
-                    setModalState(false);
                 }
                 Modal.success({
                     content: ' 로그아웃에 성공하셨습니다.',

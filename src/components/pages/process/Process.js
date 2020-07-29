@@ -1,22 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import yuri_1 from './img/yuri_1.png';
-import yuri_2 from './img/yuri_2.png';
+/*import yuri_2 from './img/yuri_2.png';
 import yuri_3 from './img/yuri_3.png';
+import yuri_1 from './img/yuri_1.png';
 import yuri_4 from './img/yuri_4.png';
 import teacher from 'src/css/img/teacher.png';
-import couple from 'src/css/img/couple.png';
+import couple from 'src/css/img/couple.png';*/
 
 import 'src/css/Process.less'
 import 'antd/dist/antd.less';
-import {Card, Input, Carousel, Select, AutoComplete} from 'antd';
+/*import {Card, Input, Carousel, Select, AutoComplete} from 'antd';*/
+import {Select} from 'antd';
 import axios from "axios";
 
 const OPTIONS = ['Movie', 'Drama', 'Music', 'Society', 'Celebrities', 'Schoollife', 'History', 'Food', 'Business'];
 
 function Process() {
 
-    const [showPaypal, setShowPaypal] = useState(false);
-    const [tutorInfo, setTutorInfo] = useState();
+/*    const [tutorInfo, setTutorInfo] = useState();*/
     const [selectedTags, setSelectedTags] = useState([]);
 
     const filteredOptions = OPTIONS.filter(o => !selectedTags.includes(o));
@@ -29,7 +29,23 @@ function Process() {
 
     //페이지 렌더링 시에 언어 목록 가져옴
     const getLanguages = () => {
-        axios.get('http://localhost:3001/account/tutor/get_languages')
+        /*
+                let user = {
+                    name: 'John',
+                    surname: 'Smith'
+                };
+
+
+                fetch('http://127.0.0.1:3001/accounts/tutors/get-languages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify(user)
+                })
+        */
+
+        axios.get('/server/accounts/tutors/get-languages')
             .then(function (response) {
 
                 let languages = response.data;
@@ -51,10 +67,10 @@ function Process() {
 
     useEffect(() => {
         getLanguages();
-        axios.post('http://localhost:3001/process/get_tutor_info', {})
+        axios.post('/server/process/get-tutor-infos', {})
             .then(function (response) {
                 console.log("response.data", response.data);
-                setTutorInfo(response.data);
+                /*setTutorInfo(response.data);*/
             }).catch(function (error) {
         });
     }, []);

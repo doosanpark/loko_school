@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Tag, Input, Tooltip, Upload, Button} from 'antd';
+/*import {Tag, Input, Tooltip, Upload, Button} from 'antd';*/
+import {Upload, Button} from 'antd';
 import axios from 'axios';
 
 function MyClass() {
@@ -18,7 +19,7 @@ function MyClass() {
 
         setUpLoading(true);
 
-        axios.post("http://localhost:3001/apis/board", formData, {
+        axios.post("/server/apis/boards", formData, {
             header: { 'Content-Type': 'multipart/form-data'}
         });
 
